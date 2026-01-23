@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Calendar | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+/* ---- reset & base ---- */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+}
+body{
+    min-height:100vh;
+    background:linear-gradient(180deg,#dfe6d0,#a3b18a);
+    display:flex;
+    flex-direction:column;
+    color:#065f46;
+}
+
+/* ---- page header ---- */
+header{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(245,247,241,.95);
+    backdrop-filter: blur(20px);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+}
+.back-btn{
+    font-size:22px;
+    cursor:pointer;
+    color:#10b981;
+}
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.brand img{
+    width:32px;
+    height:32px;
+}
+.brand-name{
+    font-weight:700;
+}
+.page-title{
+    margin-left:auto;
+    font-weight:600;
+}
+
+/* ---- container ---- */
+.container{
+    max-width:720px;
+    margin:auto;
+    width:100%;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ---- sticky calendar controls ---- */
+.calendar-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 12px;
+    height: 40px;
+    background: rgba(245,247,241,.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    position: sticky;
+    top: 64px; /* directly below main header */
+    z-index: 9;
+}
+.calendar-header button{
+    background:#10b981;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:6px 12px;
+    cursor:pointer;
+    font-weight:600;
+    min-width:48px;
+    height:32px;
+}
+.month-container{
+    flex:1;
+    text-align:center;
+    font-weight:600;
+    font-size:1.1rem;
+    color:#065f46;
+}
+
+/* ---- sticky day names ---- */
+.day-header-row{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+    position: sticky;
+    top: 104px; /* main header + calendar-header height */
+    background: rgba(245,247,241,.95);
+    backdrop-filter: blur(20px);
+    z-index:8;
+    padding-bottom:4px;
+}
+.day-name{
+    text-align:center;
+    font-weight:600;
+}
+
+/* ---- scrollable calendar grid ---- */
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+    padding-top:4px; /* ensure no overlap with sticky day row */
+}
+.day-card{
+    background:rgba(245,247,241,.9);
+    border-radius:16px;
+    border:1px solid rgba(0,0,0,.08);
+    height:80px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    position:relative;
+}
+.event-final{background:#ef4444;color:#fff;}
+.event-study{background:#f59e0b;color:#fff;}
+.event-semester{background:#3b82f6;color:#fff;}
+.event-holiday{background:#10b981;color:#fff;}
+.tooltip{
+    position:absolute;
+    bottom:100%;
+    background:#10b981;
+    color:#fff;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:.75rem;
+    display:none;
+    white-space:nowrap;
+}
+.day-card:hover .tooltip{
+    display:block;
+}
+
+/* ---- footer ---- */
+footer{
+    text-align:center;
+    font-size:.75rem;
+    color:#6b7280;
+    padding:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='home.html'">
+        arrow_back_ios
+    </span>
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+    <div class="page-title">CFS Calendar</div>
+</header>
+
+<div class="container">
+    <div class="calendar-header">
+        <button onclick="prevMonth()">&#8592;</button>
+        <div class="month-container" id="monthYear"></div>
+        <button onclick="nextMonth()">&#8594;</button>
+    </div>
+
+    <div class="day-header-row" id="dayHeaderRow"></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+</div>
+
+<footer>© 2026 IIUM · E4U</footer>
+
+<script>
+// ---- day names ----
+const DAY_HEADER = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+// ---- sample events ----
+const events = [
+    {start:'2026-01-05',end:'2026-01-09',type:'study',name:'Study Week'},
+    {start:'2026-01-12',end:'2026-01-15',type:'final',name:'Final Exam'},
+    {start:'2026-01-20',end:'2026-01-22',type:'semester',name:'Semester Break'},
+    {start:'2026-01-25',end:'2026-01-25',type:'holiday',name:'Public Holiday'}
+];
+
+// ---- starting month ----
+let currentDate = new Date(2026,0,1);
+
+function getEvent(date){
+    for(const e of events){
+        if(date >= new Date(e.start) && date <= new Date(e.end)){
+            return e;
+        }
+    }
+    return null;
+}
+
+function renderDayHeader(){
+    const dayRow = document.getElementById("dayHeaderRow");
+    dayRow.innerHTML = '';
+    for(const day of DAY_HEADER){
+        const div = document.createElement('div');
+        div.className = 'day-name';
+        div.innerText = day;
+        dayRow.appendChild(div);
+    }
+}
+
+function renderCalendar(){
+    renderDayHeader();
+    const grid = document.getElementById("calendarGrid");
+    grid.innerHTML = '';
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    document.getElementById("monthYear").innerText =
+        currentDate.toLocaleString('en',{month:'long',year:'numeric'});
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    // empty cells
+    for(let i=0;i<firstDay;i++){
+        grid.appendChild(document.createElement("div"));
+    }
+
+    // day cards
+    for(let d=1; d<=lastDate; d++){
+        const card = document.createElement("div");
+        card.className = "day-card";
+
+        const dateObj = new Date(year, month, d);
+        const ev = getEvent(dateObj);
+
+        if(ev){
+            card.classList.add("event-" + ev.type);
+            const tip = document.createElement("div");
+            tip.className = "tooltip";
+            tip.innerText = ev.name;
+            card.appendChild(tip);
+        }
+
+        card.appendChild(document.createTextNode(d));
+        grid.appendChild(card);
+    }
+}
+
+function prevMonth(){
+    currentDate.setDate(1);
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar();
+}
+
+function nextMonth(){
+    currentDate.setDate(1);
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
+}
+
+// initial render
+renderCalendar();
+</script>
+
+</body>
+</html>

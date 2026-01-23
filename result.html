@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Tracking | E4U</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #dfe6d0, #a3b18a);
+    color:#065f46;
+    display:flex;
+    flex-direction:column;
+}
+
+/* Header */
+header {
+    position: sticky;
+    top:0;
+    z-index:10;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+    border-bottom:1px solid rgba(255,255,255,0.4);
+}
+
+.back-btn {
+    font-size:22px;
+    cursor:pointer;
+    color:#134e4a;
+}
+
+.brand {
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.brand img {
+    width:32px;
+    height:32px;
+    object-fit:contain;
+}
+
+.brand-name {
+    font-size:1.1rem;
+    font-weight:700;
+    color:#065f46;
+}
+
+.container {
+    padding:16px;
+    max-width:600px;
+    margin:auto;
+    width:100%;
+}
+
+/* CGPA Card */
+.cgpa-card {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(25px) saturate(160%);
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:14px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.cgpa-card h2 {
+    font-size:2rem;
+    margin-bottom:6px;
+    color:#134e4a;
+}
+
+.cgpa-card p {
+    font-size:0.9rem;
+    color:#065f46;
+}
+
+/* Starpoint Card */
+.star-card {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(25px) saturate(160%);
+    border-radius:20px;
+    padding:16px;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.star-left {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.star-icon {
+    font-size:32px;
+    color:#facc15;
+}
+
+.star-text h4 {
+    font-size:1rem;
+    font-weight:600;
+    color:#134e4a;
+}
+
+.star-text p {
+    font-size:0.8rem;
+    color:#065f46;
+}
+
+.star-value {
+    font-size:1.4rem;
+    font-weight:700;
+    color:#4d7c0f;
+}
+
+/* Semester Cards */
+.semester-card {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(25px) saturate(160%);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+}
+
+.semester-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+.semester-header h3 {
+    font-size:1.1rem;
+    font-weight:600;
+}
+
+.semester-header .pointer {
+    font-size:1rem;
+    font-weight:600;
+    color:#4d7c0f;
+}
+
+.course-list {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:8px;
+}
+
+.course-item {
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(16px);
+    border-radius:12px;
+    padding:8px 10px;
+    font-size:0.85rem;
+    display:flex;
+    justify-content:space-between;
+}
+
+@media(max-width:420px){
+    .cgpa-card h2 { font-size:1.6rem; }
+    .star-value { font-size:1.2rem; }
+    .course-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+<header>
+    <span class="material-icons back-btn" onclick="location.href='home.html'">arrow_back_ios</span>
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+    <div style="margin-left:auto;">Result Tracker</div>
+</header>
+
+<div class="container">
+
+    <!-- CGPA -->
+    <div class="cgpa-card">
+        <h2>3.75</h2>
+        <p>Current CGPA</p>
+    </div>
+
+    <!-- Starpoint -->
+    <div class="star-card">
+        <div class="star-left">
+            <span class="material-icons star-icon">stars</span>
+            <div class="star-text">
+                <h4>Starpoint</h4>
+                <p>Reward Balance</p>
+            </div>
+        </div>
+        <div class="star-value">500</div>
+    </div>
+
+    <!-- Semester 1 -->
+    <div class="semester-card">
+        <div class="semester-header">
+            <h3>Semester 1</h3>
+            <div class="pointer">3.60</div>
+        </div>
+        <div class="course-list">
+            <div class="course-item"><span>Mathematics</span><span>A</span></div>
+            <div class="course-item"><span>Physics</span><span>B+</span></div>
+            <div class="course-item"><span>Programming</span><span>A-</span></div>
+            <div class="course-item"><span>English</span><span>B</span></div>
+        </div>
+    </div>
+
+    <!-- Semester 2 -->
+    <div class="semester-card">
+        <div class="semester-header">
+            <h3>Semester 2</h3>
+            <div class="pointer">3.85</div>
+        </div>
+        <div class="course-list">
+            <div class="course-item"><span>Mathematics 2</span><span>A</span></div>
+            <div class="course-item"><span>Chemistry</span><span>B+</span></div>
+            <div class="course-item"><span>Data Structures</span><span>A</span></div>
+            <div class="course-item"><span>Communication</span><span>A-</span></div>
+        </div>
+    </div>
+
+    <!-- Semester 3 -->
+    <div class="semester-card">
+        <div class="semester-header">
+            <h3>Semester 3</h3>
+            <div class="pointer">3.90</div>
+        </div>
+        <div class="course-list">
+            <div class="course-item"><span>Algorithms</span><span>A</span></div>
+            <div class="course-item"><span>Database</span><span>A-</span></div>
+            <div class="course-item"><span>Networking</span><span>B+</span></div>
+            <div class="course-item"><span>Elective</span><span>A</span></div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

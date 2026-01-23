@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Notes | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display","Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #dfe6d0, #a3b18a);
+    color: #065f46;
+}
+
+/* Header */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+
+.back-btn {
+    font-size: 22px;
+    cursor: pointer;
+    color: #10b981;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #065f46;
+}
+
+.subject-selector {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+.subject-selector button {
+    padding: 6px 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(245,247,241,0.9);
+    color: #065f46;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.subject-selector button.active {
+    background: #10b981;
+    color: #fff;
+}
+
+.container {
+    max-width: 520px;
+    margin: auto;
+    padding: 22px;
+}
+
+.note-card {
+    background: rgba(245,247,241,0.9);
+    backdrop-filter: blur(25px) saturate(160%);
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.7);
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.note-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subject {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #065f46;
+}
+
+.file-type {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(16,185,129,0.15);
+    color: #10b981;
+}
+
+.meta {
+    font-size: 0.85rem;
+    color: #065f46;
+    margin-top: 6px;
+}
+
+.note-action {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date {
+    font-size: 0.75rem;
+    color: #065f46;
+}
+
+.btn {
+    border: none;
+    background: rgba(16,185,129,0.15);
+    color: #065f46;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn:hover { background: rgba(16,185,129,0.25); }
+.btn:active { opacity: 0.6; }
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='home.html'">
+        arrow_back_ios
+    </span>
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+    <div style="margin-left:auto; font-weight:600;"></div> Notes</div>
+</header>
+
+<!-- Subject Filter -->
+<div class="subject-selector" id="subjectSelector"></div>
+
+<div class="container" id="notesContainer">
+    <!-- Notes will render here -->
+</div>
+
+<script>
+const notes = [
+    {subject:"Mathematics", fileType:"PDF", lecturer:"Mr. Ahmad", date:"12 Jan 2026"},
+    {subject:"Algebra", fileType:"PPT", lecturer:"Mr. Ahmad", date:"10 Jan 2026"},
+    {subject:"Physics", fileType:"PDF", lecturer:"Mr. Farhan", date:"8 Jan 2026"},
+    {subject:"Computer Science", fileType:"PPT", lecturer:"Dr. Siti", date:"10 Jan 2026"},
+    {subject:"OOP Lab", fileType:"PDF", lecturer:"Dr. Siti", date:"8 Jan 2026"},
+    {subject:"Chemistry", fileType:"PDF", lecturer:"Ms. Nur", date:"5 Jan 2026"}
+];
+
+let currentSubject = "All";
+
+function renderSubjectSelector() {
+    const container = document.getElementById("subjectSelector");
+    container.innerHTML = "";
+    const subjects = ["All", ...new Set(notes.map(n=>n.subject))];
+    subjects.forEach(sub=>{
+        const btn = document.createElement("button");
+        btn.innerText = sub;
+        if(sub===currentSubject) btn.classList.add("active");
+        btn.onclick = ()=> { currentSubject=sub; renderSubjectSelector(); renderNotes(); };
+        container.appendChild(btn);
+    });
+}
+
+function renderNotes() {
+    const container = document.getElementById("notesContainer");
+    container.innerHTML = "";
+    let filtered = notes;
+    if(currentSubject!=="All") filtered = notes.filter(n=>n.subject===currentSubject);
+    filtered.forEach(note=>{
+        const card = document.createElement("div");
+        card.className="note-card";
+        card.innerHTML=`
+            <div class="note-top">
+                <div class="subject">${note.subject}</div>
+                <div class="file-type">${note.fileType}</div>
+            </div>
+            <div class="meta">Lecturer: ${note.lecturer}</div>
+            <div class="note-action">
+                <div class="date">Uploaded: ${note.date}</div>
+                <button class="btn">View</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Initial render
+renderSubjectSelector();
+renderNotes();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absence Approval | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif; }
+body { min-height:100vh; background: linear-gradient(180deg, #dfe6d0, #a3b18a); color:#065f46; }
+
+/* Header */
+header { position: sticky; top:0; background: rgba(255,255,255,0.55); backdrop-filter: blur(20px) saturate(180%); padding:16px; display:flex; align-items:center; gap:12px; font-weight:600; border-bottom:1px solid rgba(255,255,255,0.4); z-index:10; }
+.back-btn { font-size:22px; cursor:pointer; color:#134e4a; }
+.brand { display:flex; align-items:center; gap:8px; }
+.brand img { width:32px; height:32px; object-fit:contain; }
+.brand-name { font-size:1.1rem; font-weight:700; color:#065f46; }
+
+.container { max-width:700px; margin:auto; padding:22px; }
+
+/* Application Card */
+.application-card {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(25px) saturate(160%);
+    border-radius:26px;
+    padding:20px 24px;
+    margin-bottom:20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.application-card h3 { font-size:1rem; font-weight:600; color:#065f46; margin-bottom:10px; }
+.application-card p { font-size:0.9rem; margin-bottom:6px; color:#134e4a; }
+
+.action-buttons {
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+.btn-approve, .btn-reject {
+    flex:1;
+    padding:10px;
+    font-size:0.9rem;
+    font-weight:600;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition: all 0.2s;
+}
+
+.btn-approve { background: #10b981; color:white; }
+.btn-approve:hover { background: #059669; }
+
+.btn-reject { background: #ef4444; color:white; }
+.btn-reject:hover { background: #dc2626; }
+
+/* Remarks textarea */
+.remarks { width:100%; padding:10px; margin-top:8px; border-radius:12px; border:none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.08); resize:vertical; min-height:50px; display:none; }
+
+@media(max-width:480px){
+    .action-buttons { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='letcurerhome.html'">arrow_back_ios</span>
+    <div class="brand"><img src="images.png" alt="E4U Logo"><span class="brand-name">E4U</span></div>
+    <div style="margin-left:auto; font-weight:600;">Absence Approval</div>
+</header>
+
+<div class="container">
+
+    <!-- Example Student Application Card -->
+    <div class="application-card">
+        <h3>John Doe - FENG</h3>
+        <p><strong>Matric No:</strong> F1234567</p>
+        <p><strong>Room No:</strong> M101</p>
+        <p><strong>Handphone:</strong> 012-3456789</p>
+        <p><strong>Reason:</strong> PERSONAL</p>
+        <p><strong>Postal Address:</strong> 123 Jalan Example, Kuala Lumpur</p>
+        <p><strong>Class Affected:</strong> MATH101</p>
+        <p><strong>Lecturer:</strong> Dr. Ahmad</p>
+        <p><strong>Attachment:</strong> <a href="#">document.pdf</a></p>
+
+        <textarea class="remarks" placeholder="Enter remarks (optional)"></textarea>
+
+        <div class="action-buttons">
+            <button class="btn-approve" onclick="approveApplication(this)">Approve</button>
+            <button class="btn-reject" onclick="rejectApplication(this)">Reject</button>
+        </div>
+    </div>
+
+    <!-- Another Example -->
+    <div class="application-card">
+        <h3>Maryam Ali - MEDIC</h3>
+        <p><strong>Matric No:</strong> M7654321</p>
+        <p><strong>Room No:</strong> H205</p>
+        <p><strong>Handphone:</strong> 013-9876543</p>
+        <p><strong>Reason:</strong> MEDICAL</p>
+        <p><strong>Postal Address:</strong> 56 Jalan Health, Kuala Lumpur</p>
+        <p><strong>Class Affected:</strong> BIO101</p>
+        <p><strong>Lecturer:</strong> Dr. Siti</p>
+        <p><strong>Attachment:</strong> <a href="#">medical_doc.pdf</a></p>
+
+        <textarea class="remarks" placeholder="Enter remarks (optional)"></textarea>
+
+        <div class="action-buttons">
+            <button class="btn-approve" onclick="approveApplication(this)">Approve</button>
+            <button class="btn-reject" onclick="rejectApplication(this)">Reject</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function approveApplication(btn){
+    const card = btn.closest('.application-card');
+    alert('Application approved!');
+    card.remove();
+}
+
+function rejectApplication(btn){
+    const card = btn.closest('.application-card');
+    const remarks = card.querySelector('.remarks');
+    remarks.style.display = 'block';
+    if(remarks.value.trim() === ''){
+        remarks.focus();
+        alert('Please enter remarks before rejecting.');
+        return;
+    }
+    alert('Application rejected with remarks: ' + remarks.value);
+    card.remove();
+}
+</script>
+
+</body>
+</html>

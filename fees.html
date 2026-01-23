@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Fees | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif}
+body{min-height:100vh;background:linear-gradient(180deg,#dfe6d0,#a3b18a);color:#1f2937;display:flex;flex-direction:column}
+
+/* Header */
+header{
+position:sticky;
+top:0;
+z-index:10;
+background:rgba(245,247,241,.85);
+backdrop-filter:blur(20px);
+padding:16px;
+display:flex;
+align-items:center;
+gap:12px;
+border-bottom:1px solid rgba(0,0,0,.08)
+}
+.back-btn{font-size:22px;cursor:pointer;color:#10b981}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:32px;height:32px}
+.brand-name{font-size:1.1rem;font-weight:700;color:#065f46}
+.page-title{margin-left:auto;font-size:1.1rem;font-weight:600;color:#065f46}
+
+/* Container */
+.container{
+padding:22px;
+max-width:520px;
+margin:auto;
+width:100%;
+}
+
+/* Card */
+.fee-card{
+background:rgba(245,247,241,.9);
+border-radius:26px;
+border:1px solid rgba(0,0,0,.08);
+box-shadow:0 20px 40px rgba(0,0,0,.08);
+padding:20px;
+margin-bottom:20px
+}
+.card-top{display:flex;justify-content:space-between;align-items:center}
+.number{font-size:2.2rem;font-weight:700;color:#065f46}
+.label{font-size:.95rem;margin-top:6px}
+.dot{width:14px;height:14px;border-radius:50%}
+.green{background:#22c55e}
+.orange{background:#facc15}
+.red{background:#ef4444}
+
+/* Pay Now Button (NORMAL) */
+.pay-btn{
+margin:20px 0;
+width:100%;
+padding:14px;
+border:none;
+border-radius:18px;
+background:#10b981;
+color:white;
+font-size:1rem;
+font-weight:700;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+/* Modal */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.4);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:50;
+}
+.modal-box{
+background:white;
+border-radius:22px;
+padding:22px;
+width:90%;
+max-width:320px;
+text-align:center;
+}
+.modal img{width:180px;margin:12px auto}
+.confirm-btn{
+margin-top:14px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:16px;
+background:#22c55e;
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+.close-btn{
+margin-top:10px;
+font-size:.85rem;
+color:#ef4444;
+cursor:pointer;
+}
+
+footer{text-align:center;font-size:.75rem;color:#6b7280;padding:14px}
+</style>
+</head>
+
+<body>
+
+<header>
+<span class="material-icons back-btn" onclick="location.href='home.html'">arrow_back_ios</span>
+<div class="brand">
+<img src="images.png">
+<span class="brand-name">E4U</span>
+</div>
+<div class="page-title">Tuition Fees</div>
+</header>
+
+<div class="container">
+
+<div class="fee-card">
+<div class="card-top">
+<div>
+<div class="number" id="total">6</div>
+<div class="label">Total Transactions</div>
+</div>
+<div class="dot orange"></div>
+</div>
+</div>
+
+<div class="fee-card">
+<div class="card-top">
+<div>
+<div class="number" id="success">2</div>
+<div class="label">Successful Payments</div>
+</div>
+<div class="dot green"></div>
+</div>
+</div>
+
+<div class="fee-card">
+<div class="card-top">
+<div>
+<div class="number" id="pending">1</div>
+<div class="label">Pending Payments</div>
+</div>
+<div class="dot orange"></div>
+</div>
+</div>
+
+<div class="fee-card">
+<div class="card-top">
+<div>
+<div class="number" id="failed">0</div>
+<div class="label">Failed Payments</div>
+</div>
+<div class="dot red"></div>
+</div>
+</div>
+
+<!-- Pay Now normal (scroll ikut page) -->
+<button class="pay-btn" onclick="openPay()">Pay Now</button>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="payModal">
+<div class="modal-box">
+<h3>Scan to Pay</h3>
+<img src="qr.jpeg" alt="QR Code">
+<p><strong>Bank:</strong> Maybank</p>
+<p><strong>Account No:</strong> 1621 0757 2716</p>
+<p><strong>Account Type:</strong> Savings</p>
+
+<button class="confirm-btn" onclick="confirmPayment()">Confirm Payment</button>
+<div class="close-btn" onclick="closePay()">Cancel</div>
+</div>
+</div>
+
+<footer>© 2026 E4U</footer>
+
+<script>
+function openPay(){
+document.getElementById("payModal").style.display="flex";
+}
+
+function closePay(){
+document.getElementById("payModal").style.display="none";
+}
+
+function confirmPayment(){
+document.getElementById("payModal").style.display="none";
+
+/* Successful +1 */
+let success = document.getElementById("success");
+success.innerText = parseInt(success.innerText) + 1;
+
+/* Total +1 */
+let total = document.getElementById("total");
+total.innerText = parseInt(total.innerText) + 1;
+
+/* Pending kekal (tak berubah) */
+alert("Payment Successful");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Carry Mark | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #dfe6d0, #a3b18a);
+    color: #1f2937;
+}
+
+/* Header */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(245,247,241,0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Back Arrow */
+.back-btn {
+    font-size: 22px;
+    cursor: pointer;
+    color: #10b981;
+}
+
+/* Brand */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #065f46;
+}
+
+/* Page Title */
+.page-title {
+    margin-left: auto;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #065f46;
+}
+
+/* Section Buttons */
+.section-select {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+.section-btn {
+    padding: 8px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(245,247,241,0.9);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #065f46;
+    transition: all 0.2s;
+}
+
+.section-btn.active {
+    background: #10b981;
+    color: #fff;
+}
+
+/* Table Card */
+.table-card {
+    background: rgba(245,247,241,0.9);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    padding: 16px;
+    margin: 16px auto;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+th, td {
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+th {
+    font-weight: 600;
+    background: rgba(220,237,221,0.9);
+    position: sticky;
+    top: 0;
+    color: #065f46;
+}
+
+td:first-child, th:first-child {
+    text-align: left;
+    min-width: 150px;
+}
+
+/* Input */
+input.mark-input {
+    width: 50px;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.2);
+    text-align: center;
+    font-size: 0.75rem;
+    background: rgba(255,255,255,0.9);
+    color: #065f46;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+    padding: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='letcurerhome.html'">
+        arrow_back_ios
+    </span>
+
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+
+    <div class="page-title">Student Carry Mark</div>
+</header>
+
+<div class="section-select">
+    <button class="section-btn active" onclick="loadSection('481', this)">Section 481</button>
+    <button class="section-btn" onclick="loadSection('200', this)">Section 200</button>
+    <button class="section-btn" onclick="loadSection('143', this)">Section 143</button>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Quiz 1</th>
+                <th>Quiz 2</th>
+                <th>Test 1</th>
+                <th>Test 2</th>
+                <th>Assignment</th>
+            </tr>
+        </thead>
+        <tbody id="studentTable"></tbody>
+    </table>
+</div>
+
+<footer>© 2026 E4U</footer>
+
+<script>
+const sections = {
+    "481":[
+        "Ahmad Zikri Hassan","Aisyah Nur Iman","Muhammad Danish Amir",
+        "Nur Ain Sofea","Syafiq Aiman Roslan","Siti Nur Alia",
+        "Hafiz Hakimi","Nur Syuhada Zainal","Muhammad Irfan Hakim",
+        "Aina Qistina","Amirul Haziq","Nur Nabila Farhana",
+        "Muhammad Afiq","Siti Balqis","Daniel Firdaus",
+        "Nur Afiqah","Muhammad Faiz","Alya Syahirah",
+        "Hakim Azman","Nur Irdina","Izzat Haziq",
+        "Siti Khadijah","Aiman Luqman","Nur Hidayah","Arif Danial"
+    ],
+    "200":[
+        "Muhammad Amin","Nur Farah Izzati","Adam Hakeem","Siti Aisyah",
+        "Amirah Nabila","Muhammad Zaid","Nur Atiqah","Aiman Sofyan",
+        "Husna Amirah","Faris Akmal","Nur Aqilah","Muhammad Ariff",
+        "Nurin Sofia","Afiq Hakim","Siti Munirah",
+        "Danish Irfan","Nur Anis","Aiman Hakimi",
+        "Alya Iman","Haziq Firdaus","Nur Aina",
+        "Syed Adam","Nabila Zulaikha","Irfan Syazwan","Nur Sabrina"
+    ],
+    "143":[
+        "Muhammad Akram","Nur Shafiqa","Aiman Harith","Siti Maisarah",
+        "Aisyah Humaira","Muhammad Rayyan","Nur Amirah",
+        "Afiq Zulkifli","Nur Izzah","Haris Aiman",
+        "Alya Damia","Muhammad Ikhwan","Nur Zahirah",
+        "Syafiq Danial","Nur Balqis","Aiman Naufal",
+        "Siti Afiqah","Hakim Syazwan","Nur Athirah",
+        "Danish Hakim","Alya Nabila","Muhammad Syahmi",
+        "Nur Hanan","Irfan Muaz","Siti Nurain"
+    ]
+};
+
+function loadSection(section, btn){
+    document.querySelectorAll('.section-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const tbody=document.getElementById("studentTable");
+    tbody.innerHTML="";
+
+    sections[section].forEach(name=>{
+        const row=document.createElement("tr");
+        row.innerHTML=`
+            <td>${name}</td>
+            <td><input class="mark-input" type="number" min="0"></td>
+            <td><input class="mark-input" type="number" min="0"></td>
+            <td><input class="mark-input" type="number" min="0"></td>
+            <td><input class="mark-input" type="number" min="0"></td>
+            <td><input class="mark-input" type="number" min="0"></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+loadSection("481", document.querySelector(".section-btn.active"));
+</script>
+
+</body>
+</html>

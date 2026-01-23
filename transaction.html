@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transaction | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #dfe6d0, #a3b18a); 
+    color: #111;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+    color: #064e03;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.back-btn {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* Table Card */
+.table-card {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.45);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    padding: 16px;
+    margin: 16px auto;
+    max-width: 95%;
+    width: 600px; /* Optional: limit width on desktop */
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+th, td {
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+th {
+    font-weight: 600;
+    background: rgba(255,255,255,0.5);
+    color: #064e03;
+}
+
+td.amount { font-weight: 600; }
+td.credit { color: #16a34a; }
+td.debit { color: #dc2626; }
+
+/* --- Button Centering Logic --- */
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.pay-now-btn {
+    background: #4a5d23;
+    color: white;
+    border: none;
+    padding: 14px 32px; /* Slightly larger for better tap target */
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(74, 93, 35, 0.2);
+}
+
+.pay-now-btn:hover {
+    background: #38461a;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(74, 93, 35, 0.3);
+}
+
+.pay-now-btn:active {
+    transform: translateY(0);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 24px;
+    border-radius: 28px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.qr-code-img {
+    width: 200px;
+    height: 200px;
+    margin: 20px 0;
+}
+
+.close-modal {
+    color: #666;
+    float: right;
+    cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+    padding: 20px;
+    margin-top: auto;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-left">
+        <span class="material-icons back-btn" onclick="location.href='letcurerhome.html'">
+            arrow_back_ios
+        </span>
+        <div>Transaction</div>
+    </div>
+</header>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount (RM)</th>
+                <th>Balance (RM)</th>
+            </tr>
+        </thead>
+        <tbody id="transactionTable">
+            </tbody>
+    </table>
+</div>
+
+<div class="button-container">
+    <button class="pay-now-btn" onclick="openPayment()">
+        <span class="material-icons">payments</span>
+        Pay Now
+    </button>
+</div>
+
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <span class="material-icons close-modal" onclick="closePayment()">close</span>
+        <h3 style="color: #064e03;">Bank QR Payment</h3>
+        <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Scan to complete transaction</p>
+        
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PAYMENT_DEMO_E4U" alt="Bank QR" class="qr-code-img">
+        
+        <p style="font-weight: bold; font-size: 1.1rem;">RM 100.00</p>
+        <p style="font-size: 0.7rem; color: #999; margin-top: 15px;">Transaction Securely Encrypted</p>
+    </div>
+</div>
+
+<footer>&copy; 2026 E4U Secure Payments</footer>
+
+<script>
+const transactions = [
+    { date: "2026-01-12", desc: "School Fee Payment", amount: 500, type: "debit", balance: 1500 },
+    { date: "2026-01-14", desc: "Scholarship Credit", amount: 300, type: "credit", balance: 1800 },
+    { date: "2026-01-16", desc: "Library Fine", amount: 20, type: "debit", balance: 1780 },
+    { date: "2026-01-17", desc: "Canteen Purchase", amount: 12, type: "debit", balance: 1768 },
+    { date: "2026-01-18", desc: "Top-up Deposit", amount: 100, type: "credit", balance: 1868 }
+];
+
+const tbody = document.getElementById("transactionTable");
+
+transactions.forEach(tx => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${tx.date}</td>
+        <td>${tx.desc}</td>
+        <td class="amount ${tx.type}">${tx.type === 'credit' ? '+' : '-'}${tx.amount.toFixed(2)}</td>
+        <td>${tx.balance.toFixed(2)}</td>
+    `;
+    tbody.appendChild(row);
+});
+
+function openPayment() {
+    document.getElementById("paymentModal").style.display = "block";
+}
+
+function closePayment() {
+    document.getElementById("paymentModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    let modal = document.getElementById("paymentModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>

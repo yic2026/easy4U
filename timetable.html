@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timetable | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(180deg,#dfe6d0,#a3b18a);
+    color:#065f46;
+}
+
+/* Header */
+header{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:rgba(255,255,255,0.55);
+    backdrop-filter:blur(20px) saturate(180%);
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.back-btn{
+    font-size:22px;
+    cursor:pointer;
+    color:#10b981;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.brand img{
+    width:32px;
+    height:32px;
+}
+
+.brand-name{
+    font-weight:700;
+    font-size:1.1rem;
+}
+
+.page-title{
+    margin-left:auto;
+    font-weight:600;
+}
+
+/* Semester buttons */
+.section-select{
+    display:flex;
+    gap:12px;
+    padding:16px;
+    overflow-x:auto;
+}
+
+.section-btn{
+    padding:8px 16px;
+    border-radius:18px;
+    border:1px solid rgba(0,0,0,0.1);
+    background:rgba(245,247,241,0.9);
+    font-size:0.85rem;
+    font-weight:600;
+    cursor:pointer;
+    color:#065f46;
+}
+
+.section-btn.active{
+    background:#10b981;
+    color:white;
+}
+
+/* Container */
+.container{
+    padding:16px;
+    max-width:520px;
+    margin:auto;
+    overflow-x:auto;
+}
+
+/* Timetable */
+.timetable{
+    display:grid;
+    grid-template-columns:60px repeat(5,1fr);
+    gap:8px;
+}
+
+.time-label,
+.day-label,
+.empty,
+.course{
+    border-radius:14px;
+    text-align:center;
+    font-size:0.8rem;
+}
+
+.time-label{
+    background:rgba(245,247,241,0.9);
+    padding:6px 0;
+}
+
+.day-label{
+    background:rgba(245,247,241,0.9);
+    padding:8px 0;
+    font-weight:600;
+}
+
+.empty{
+    min-height:50px;
+    background:rgba(245,247,241,0.5);
+}
+
+.course{
+    min-height:50px;
+    padding:6px 4px;
+    font-weight:600;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.yellow{background:#f2c94c;color:#111;}
+.orange{background:#f2994a;}
+.purple{background:#9b51e0;}
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='home.html'">
+        arrow_back_ios
+    </span>
+
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+
+    <div class="page-title">Timetable</div>
+</header>
+
+<!-- Semester buttons -->
+<div class="section-select">
+    <button class="section-btn active" onclick="loadSem('sem1',this)">Sem 1</button>
+    <button class="section-btn" onclick="loadSem('sem2',this)">Sem 2</button>
+    <button class="section-btn" onclick="loadSem('final1',this)">Final Sem 1</button>
+    <button class="section-btn" onclick="loadSem('final2',this)">Final Sem 2</button>
+</div>
+
+<div class="container">
+    <div id="timetableContainer"></div>
+</div>
+
+<script>
+const headerHTML = `
+<div class="timetable">
+<div></div>
+<div class="day-label">Mon</div>
+<div class="day-label">Tue</div>
+<div class="day-label">Wed</div>
+<div class="day-label">Thu</div>
+<div class="day-label">Fri</div>
+`;
+
+const footerHTML = `</div>`;
+
+/* ========= SEM 1 ========= */
+const sem1 = `
+${headerHTML}
+
+<div class="time-label">09</div>
+<div class="course yellow">PHCF 0215<br>Sect 189</div>
+<div class="empty"></div>
+<div class="course purple">ICTF 0513</div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">10</div>
+<div class="course purple">ICTF 0513</div>
+<div class="course orange">MTCF 0114</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">11</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">12</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">13</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">14</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div>
+<div class="course yellow">PHCF 0215</div>
+<div class="empty"></div>
+
+<div class="time-label">15</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">16</div>
+<div class="course yellow">PHCF 0215</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div>
+<div class="course orange">MTCF 0114</div>
+
+<div class="time-label">17</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+${footerHTML}
+`;
+
+/* ========= SEM 2 ========= */
+const sem2 = `
+${headerHTML}
+
+<div class="time-label">09</div>
+<div class="empty"></div>
+<div class="course purple">ICTF 0621</div>
+<div class="empty"></div>
+<div class="course yellow">PHCF 0320</div>
+<div class="empty"></div>
+
+<div class="time-label">10</div>
+<div class="course orange">MTCF 0220</div>
+<div class="empty"></div>
+<div class="course purple">ICTF 0621</div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">11</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">12</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">13</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">14</div>
+<div class="course yellow">PHCF 0320</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div>
+<div class="course orange">MTCF 0220</div>
+
+<div class="time-label">15</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">16</div>
+<div class="empty"></div>
+<div class="course purple">ICTF 0621</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">17</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+${footerHTML}
+`;
+
+/* ========= FINAL SEM 1 ========= */
+const final1 = `
+${headerHTML}
+
+<div class="time-label">09</div>
+<div class="empty"></div>
+<div class="course purple">ICT FINAL</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">10</div>
+<div class="course orange">MATH FINAL</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">11</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">12</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">13</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">14</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="course yellow">PHYS FINAL</div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">15</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">16</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">17</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+${footerHTML}
+`;
+
+/* ========= FINAL SEM 2 ========= */
+const final2 = `
+${headerHTML}
+
+<div class="time-label">09</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="course purple">ICT FINAL</div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">10</div>
+<div class="empty"></div>
+<div class="course orange">MATH FINAL</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+
+<div class="time-label">11</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">12</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">13</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">14</div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="empty"></div>
+<div class="course yellow">PHYS FINAL</div>
+<div class="empty"></div>
+
+<div class="time-label">15</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">16</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+<div class="time-label">17</div>
+<div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div><div class="empty"></div>
+
+${footerHTML}
+`;
+
+function loadSem(sem, btn){
+    document.querySelectorAll('.section-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const map={sem1,sem2,final1,final2};
+    document.getElementById("timetableContainer").innerHTML = map[sem];
+}
+
+loadSem('sem1', document.querySelector('.section-btn.active'));
+</script>
+
+</body>
+</html>

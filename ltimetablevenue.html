@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venue Timetable | E4U</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #dfe6d0, #a3b18a); /* soft olive green */
+    color:#065f46;
+    display:flex;
+    flex-direction:column;
+}
+
+/* Header */
+header {
+    position: sticky;
+    top:0;
+    z-index:10;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:1.2rem;
+    font-weight:600;
+    border-bottom:1px solid rgba(255,255,255,0.4);
+}
+
+.back-btn {
+    font-size:22px;
+    cursor:pointer;
+    color:#134e4a;
+}
+
+/* Brand (Logo + E4U) */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #065f46; /* dark green */
+}
+
+/* Container */
+.container {
+    padding:16px;
+    max-width: 520px;
+    margin:auto;
+    overflow-x:auto;
+}
+
+/* Grid */
+.timetable {
+    display:grid;
+    grid-template-columns: 60px repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+/* Time label */
+.time-label {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(16px);
+    border-radius: 14px;
+    text-align:center;
+    padding:6px 0;
+    font-size:0.85rem;
+    font-weight:500;
+    color:#065f46;
+}
+
+/* Day header */
+.day-label {
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(16px);
+    border-radius:14px;
+    text-align:center;
+    padding:8px 0;
+    font-weight:600;
+    color:#134e4a;
+}
+
+/* Slot block */
+.slot {
+    border-radius:16px;
+    padding:6px 4px;
+    font-size:0.85rem;
+    font-weight:600;
+    text-align:center;
+    line-height:1.2rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:50px;
+    color:white;
+    cursor:pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.slot:hover {
+    transform: translateY(-3px);
+    box-shadow:0 6px 15px rgba(0,0,0,0.12);
+}
+
+/* Slot colors */
+.available { background:#a3b18a; color:#111;} /* olive accent */
+.booked { background:#6a994e; }   /* darker olive */
+.unavailable { background:#386641; } /* forest green */
+
+/* Empty cell */
+.empty { min-height:50px; }
+
+/* Book Now button */
+.book-btn {
+    background: #4a90e2;
+    color: white;
+    padding:12px;
+    text-align:center;
+    font-weight:600;
+    border-radius:14px;
+    cursor:pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto 30px auto;
+    display:block;
+    text-decoration: none;
+}
+
+.book-btn:hover {
+    background:#357ab8;
+    transform: translateY(-3px);
+}
+
+/* Popup form overlay */
+#bookingFormPopup {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+    z-index:50;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Form box */
+.popup-content {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 20px;
+    padding:25px;
+    max-width:400px;
+    width:90%;
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+/* Close button */
+.close-btn {
+    position:absolute;
+    top:12px;
+    right:12px;
+    font-size:22px;
+    cursor:pointer;
+    color:#134e4a;
+}
+
+/* Form fields */
+.popup-content h3 {
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.popup-content input, .popup-content select {
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+}
+
+.popup-content button {
+    margin-top:12px;
+    background:#4a90e2;
+    color:white;
+    padding:12px;
+    width:100%;
+    border:none;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:opacity 0.2s ease;
+}
+
+.popup-content button:active {
+    opacity:0.7;
+}
+
+/* Mobile tweaks */
+@media(max-width:420px){
+    .timetable {
+        grid-template-columns: 50px repeat(5, 1fr);
+        gap:6px;
+    }
+    .slot { font-size:0.75rem; min-height:40px;}
+    .time-label { font-size:0.75rem;}
+}
+</style>
+</head>
+
+<body>
+<header>
+    <span class="material-icons back-btn" onclick="location.href='letcurerbooking.html'">
+        arrow_back_ios
+    </span>
+
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+
+    <div id="venue-title" style="margin-left:auto;">Venue Timetable</div>
+</header>
+
+<div class="container">
+    <div class="timetable">
+        <!-- Days header -->
+        <div></div>
+        <div class="day-label">Mon</div>
+        <div class="day-label">Tue</div>
+        <div class="day-label">Wed</div>
+        <div class="day-label">Thu</div>
+        <div class="day-label">Fri</div>
+
+        <!-- 09:00 -->
+        <div class="time-label">09</div>
+        <div class="slot available">Available</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+        <div class="slot unavailable">Blocked</div>
+        <div class="slot available">Available</div>
+
+        <!-- 10:00 -->
+        <div class="time-label">10</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+        <div class="slot available">Available</div>
+
+        <!-- 11:00 -->
+        <div class="time-label">11</div>
+        <div class="slot available">Available</div>
+        <div class="slot available">Available</div>
+        <div class="slot unavailable">Blocked</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+
+        <!-- 12:00 -->
+        <div class="time-label">12</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+        <div class="slot available">Available</div>
+        <div class="slot available">Available</div>
+        <div class="slot unavailable">Blocked</div>
+
+        <!-- 13:00 -->
+        <div class="time-label">13</div>
+        <div class="slot available">Available</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+        <div class="slot available">Available</div>
+        <div class="slot booked">Booked</div>
+
+        <!-- 14:00 -->
+        <div class="time-label">14</div>
+        <div class="slot available">Available</div>
+        <div class="slot available">Available</div>
+        <div class="slot unavailable">Blocked</div>
+        <div class="slot booked">Booked</div>
+        <div class="slot available">Available</div>
+    </div>
+
+    <!-- Book Now Button -->
+    <div class="book-btn" onclick="openBookingForm()">Book Now</div>
+</div>
+
+<!-- Popup Form -->
+<div id="bookingFormPopup">
+    <div class="popup-content">
+        <span class="material-icons close-btn" onclick="closeBookingForm()">close</span>
+        <h3>Book Venue</h3>
+        <form>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <label for="date">Booking Date:</label>
+            <input type="date" name="date" required>
+            <label for="time">Booking Time:</label>
+            <input type="time" name="time" required>
+            <button type="submit">Submit Booking</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openBookingForm() {
+    document.getElementById('bookingFormPopup').style.display = 'flex';
+}
+function closeBookingForm() {
+    document.getElementById('bookingFormPopup').style.display = 'none';
+}
+
+// Optional: Set venue name dynamically from URL
+const params = new URLSearchParams(window.location.search);
+const venue = params.get('facility') || 'Venue';
+document.getElementById('venue-title').textContent = venue + ' Timetable';
+</script>
+
+</body>
+</html>

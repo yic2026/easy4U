@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilities Booking | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    min-height:100vh;
+    background: linear-gradient(180deg, #dfe6d0, #a3b18a);
+    display:flex;
+    flex-direction:column;
+    color:#1f2937;
+}
+
+/* Header */
+header {
+    position: sticky;
+    top:0;
+    z-index:10;
+    background: rgba(245,247,241,0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding:18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid rgba(0,0,0,0.08);
+}
+
+/* Back Arrow */
+.back-btn {
+    font-size:22px;
+    cursor:pointer;
+    color:#10b981;
+}
+
+/* Brand */
+.brand {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.brand img {
+    width:32px;
+    height:32px;
+    object-fit:contain;
+}
+
+.brand-name {
+    font-size:1.1rem;
+    font-weight:700;
+    color:#065f46;
+}
+
+/* Page Title */
+.page-title {
+    margin-left:auto;
+    font-size:1.1rem;
+    font-weight:600;
+    color:#065f46;
+}
+
+/* Dashboard Grid */
+.dashboard {
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:18px;
+    padding:22px;
+    max-width:520px;
+    margin:auto;
+    width:100%;
+}
+
+/* Card */
+.card {
+    background: rgba(245,247,241,0.9);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    border-radius:26px;
+    border:1px solid rgba(0,0,0,0.08);
+    height:150px;
+    padding:20px 10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    cursor:pointer;
+    transition: all 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card:active {
+    transform: scale(0.95);
+}
+
+/* Icon */
+.icon-box {
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:14px;
+}
+
+/* Card Icons with different colors */
+.lab1 .card-icon { color:#3b82f6; }       /* Lab 1 blue */
+.lab2 .card-icon { color:#f59e0b; }       /* Lab 2 orange */
+.lecture .card-icon { color:#8b5cf6; }    /* Lecture Hall purple */
+.exam .card-icon { color:#ef4444; }       /* Exam Hall red */
+.khawarizmi .card-icon { color:#10b981; }/* Khawarizmi Hall green */
+
+.card-icon {
+    font-size:26px;
+}
+
+.card-title {
+    font-size:0.95rem;
+    font-weight:600;
+    color:#1f2937;
+}
+
+/* Footer */
+footer {
+    text-align:center;
+    font-size:0.8rem;
+    color:#6b7280;
+    padding:14px;
+}
+
+/* Mobile */
+@media (max-width:480px) {
+    .dashboard {
+        grid-template-columns:1fr;
+        gap:14px;
+        padding:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='home.html'">
+        arrow_back_ios
+    </span>
+
+    <div class="brand">
+        <img src="images.png" alt="E4U Logo">
+        <span class="brand-name">E4U</span>
+    </div>
+
+    <div class="page-title">Facilities Booking</div>
+</header>
+
+<div class="dashboard">
+    <button class="card lab1" onclick="location.href='timetablevenue.html'">
+        <div class="icon-box">
+            <span class="material-icons card-icon">science</span>
+        </div>
+        <div class="card-title">Lab 1 (30)</div>
+    </button>
+
+    <button class="card lab2" onclick="location.href='timetablevenue.html'">
+        <div class="icon-box">
+            <span class="material-icons card-icon">science</span>
+        </div>
+        <div class="card-title">Lab 2 (25)</div>
+    </button>
+
+    <button class="card lecture" onclick="location.href='timetablevenue.html'">
+        <div class="icon-box">
+            <span class="material-icons card-icon">school</span>
+        </div>
+        <div class="card-title">Lecture Hall (100)</div>
+    </button>
+
+    <button class="card exam" onclick="location.href='timetablevenue.html'">
+        <div class="icon-box">
+            <span class="material-icons card-icon">assignment</span>
+        </div>
+        <div class="card-title">Exam Hall (120)</div>
+    </button>
+
+    <button class="card khawarizmi" onclick="location.href='timetablevenue.html'">
+        <div class="icon-box">
+            <span class="material-icons card-icon">apartment</span>
+        </div>
+        <div class="card-title">Khawarizmi Hall (80)</div>
+    </button>
+</div>
+
+<footer>© 2026 E4U</footer>
+
+</body>
+</html>

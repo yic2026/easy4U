@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absence Application | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif; }
+body { min-height:100vh; background: linear-gradient(180deg, #dfe6d0, #a3b18a); color:#065f46; }
+
+header { position: sticky; top:0; background: rgba(255,255,255,0.55); backdrop-filter: blur(20px) saturate(180%); padding:16px; display:flex; align-items:center; gap:12px; font-weight:600; border-bottom:1px solid rgba(255,255,255,0.4); z-index:10; }
+.back-btn { font-size:22px; cursor:pointer; color:#134e4a; }
+.brand { display:flex; align-items:center; gap:8px; }
+.brand img { width:32px; height:32px; object-fit:contain; }
+.brand-name { font-size:1.1rem; font-weight:700; color:#065f46; }
+
+.container { max-width:600px; margin:auto; padding:22px; }
+
+.form-card { background: rgba(255,255,255,0.35); backdrop-filter: blur(25px) saturate(160%); border-radius:26px; padding:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.7); }
+
+.section-title { font-size:1rem; font-weight:600; margin-bottom:14px; color:#065f46; }
+.field { margin-bottom:16px; }
+label { font-size:0.85rem; color:#134e4a; display:block; margin-bottom:6px; }
+input, select, textarea { width:100%; padding:12px 14px; border-radius:14px; border:none; background: rgba(255,255,255,0.7); box-shadow: inset 0 1px 2px rgba(0,0,0,0.08); font-size:0.95rem; color:#065f46; }
+input:focus, select:focus, textarea:focus { outline:none; box-shadow:0 0 0 2px rgba(5,111,70,0.4); }
+
+textarea { resize: vertical; min-height:60px; }
+
+.row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+.submit-btn { margin-top:20px; width:100%; padding:14px; border-radius:18px; border:none; font-size:1rem; font-weight:600; color:white; background: linear-gradient(135deg,#65a30d,#4d7c0f); box-shadow:0 10px 20px rgba(101,163,13,0.4); cursor:pointer; transition: all 0.2s; }
+.submit-btn:active { transform: scale(0.97); }
+
+.others-reason { display:none; margin-top:10px; }
+
+@media(max-width:420px){ .row { grid-template-columns:1fr; } }
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="material-icons back-btn" onclick="location.href='home.html'">arrow_back_ios</span>
+    <div class="brand"><img src="images.png" alt="E4U Logo"><span class="brand-name">E4U</span></div>
+    <div style="margin-left:auto; font-weight:600;">Absence Application</div>
+</header>
+
+<div class="container">
+<form class="form-card" id="absenceForm">
+    <div class="section-title">Student Information</div>
+
+    <div class="field">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your full name" required>
+    </div>
+
+    <div class="field">
+        <label>Matric Number</label>
+        <input type="text" placeholder="Enter matric number" required>
+    </div>
+
+    <div class="field">
+        <label>Mahallah Room No.</label>
+        <input type="text" placeholder="Enter room number" required>
+    </div>
+
+    <div class="field">
+        <label>Handphone Number</label>
+        <input type="tel" pattern="[0-9]{3}-[0-9]{7}" placeholder="01X-XXXXXXX" required>
+    </div>
+
+    <div class="field">
+        <label>Programme</label>
+        <select id="programme" required>
+            <option value="">Select programme</option>
+            <option>FENG</option><option>MEDIC</option><option>BIOSC</option><option>PHYSC</option>
+            <option>HS</option><option>BEN</option><option>BAR</option><option>ECONS</option>
+            <option>ENCOM</option><option>ARCOM</option><option>MACOM</option><option>TMGT</option>
+            <option>DENTI</option><option>PMACY</option><option>ALLHS</option><option>NUS</option>
+            <option>FCS</option><option>LAWS</option><option>AED</option><option>IRK</option>
+        </select>
+    </div>
+
+    <div class="field">
+        <label>Reason of Absence</label>
+        <select id="absenceReason" required>
+            <option value="">Select reason</option>
+            <option>PERSONAL</option>
+            <option>OFFICIAL</option>
+            <option>MEDICAL</option>
+            <option>OTHERS</option>
+        </select>
+        <input type="text" id="othersReason" class="others-reason" placeholder="Please specify your reason for 'Others'">
+    </div>
+
+    <div class="field">
+        <label>Postal Address (During Absence)</label>
+        <textarea placeholder="Enter postal address" required></textarea>
+    </div>
+
+    <div class="field">
+        <label>Class Affected</label>
+        <input type="text" placeholder="Enter class name" required>
+    </div>
+
+    <div class="field">
+        <label>Lecturer Name for Affected Class</label>
+        <input type="text" placeholder="Enter lecturer name" required>
+    </div>
+
+    <div class="field">
+        <label>Attachment (Document)</label>
+        <input type="file" required>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Absence Application</button>
+</form>
+</div>
+
+<script>
+// Show/hide Others reason textbox
+const absenceReasonSelect = document.getElementById('absenceReason');
+const othersReasonInput = document.getElementById('othersReason');
+
+absenceReasonSelect.addEventListener('change', function(){
+    if(this.value === 'OTHERS'){
+        othersReasonInput.style.display = 'block';
+        othersReasonInput.required = true;
+    } else {
+        othersReasonInput.style.display = 'none';
+        othersReasonInput.value = '';
+        othersReasonInput.required = false;
+    }
+});
+
+// Form submission
+document.getElementById('absenceForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Absence application submitted successfully!');
+    this.reset();
+    othersReasonInput.style.display = 'none';
+});
+</script>
+
+</body>
+</html>

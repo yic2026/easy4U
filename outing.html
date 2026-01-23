@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outing Request | E4U</title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif}
+body{min-height:100vh;background:linear-gradient(180deg,#dfe6d0,#a3b18a);color:#065f46}
+
+/* Header */
+header{
+position:sticky;top:0;z-index:10;
+background:rgba(255,255,255,.55);
+backdrop-filter:blur(20px);
+padding:16px;
+display:flex;align-items:center;gap:12px;
+border-bottom:1px solid rgba(255,255,255,.4)
+}
+.back-btn{font-size:22px;cursor:pointer;color:#134e4a}
+.brand{display:flex;align-items:center;gap:8px}
+.brand img{width:32px}
+.brand-name{font-size:1.1rem;font-weight:700}
+.page-title{margin-left:auto;font-weight:600}
+
+/* Tabs */
+.tabs{
+display:flex;
+gap:10px;
+padding:16px;
+max-width:520px;
+margin:auto;
+}
+.tab-btn{
+flex:1;
+padding:10px;
+border:none;
+border-radius:14px;
+font-weight:600;
+cursor:pointer;
+background:rgba(255,255,255,.6);
+color:#065f46;
+}
+.tab-btn.active{
+background:#22c55e;
+color:white;
+}
+
+/* Container */
+.container{max-width:520px;margin:auto;padding:0 22px 22px}
+
+/* Form Card */
+.form-card{
+background:rgba(255,255,255,.35);
+backdrop-filter:blur(25px);
+border-radius:26px;
+padding:24px;
+box-shadow:0 20px 40px rgba(0,0,0,.12)
+}
+.section-title{font-weight:600;margin-bottom:14px}
+.field{margin-bottom:16px}
+label{font-size:.85rem;margin-bottom:6px;display:block}
+input,select{
+width:100%;padding:12px 14px;
+border-radius:14px;border:none;
+background:rgba(255,255,255,.7)
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.submit-btn{
+margin-top:20px;width:100%;
+padding:14px;border:none;border-radius:18px;
+background:#22c55e;color:white;font-weight:600;
+cursor:pointer
+}
+
+/* History */
+.history-card{
+background:rgba(255,255,255,.35);
+border-radius:22px;
+padding:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.1)
+}
+.status{
+margin-top:10px;
+font-weight:700;
+}
+.pending{color:#f59e0b}
+.approved{color:#22c55e}
+
+.others-reason{display:none;margin-top:10px}
+.hidden{display:none}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header>
+<span class="material-icons back-btn" onclick="location.href='home.html'">arrow_back_ios</span>
+<div class="brand"><img src="images.png"><span class="brand-name">E4U</span></div>
+<div class="page-title">Outing Request</div>
+</header>
+
+<!-- Tabs -->
+<div class="tabs">
+<button class="tab-btn active" onclick="showTab('application')">Application</button>
+<button class="tab-btn" onclick="showTab('history')">History</button>
+</div>
+
+<div class="container">
+
+<!-- APPLICATION -->
+<div id="application" class="form-card">
+<form id="outingForm">
+
+<div class="section-title">Student Information</div>
+
+<div class="field">
+<label>Full Name</label>
+<input type="text" id="name" required>
+</div>
+
+<div class="field">
+<label>Type of Outing</label>
+<select id="outingType" required>
+<option value="">Select type</option>
+<option>Family</option>
+<option>Emergency</option>
+<option>Overnight</option>
+<option>Sem Break</option>
+<option>Others</option>
+</select>
+<input type="text" id="othersReason" class="others-reason" placeholder="Specify reason">
+</div>
+
+<div class="field">
+<label>Email</label>
+<input type="email" id="email" required>
+</div>
+
+<div class="field">
+<label>Phone Number</label>
+<input type="tel" id="phone" required>
+</div>
+
+<div class="section-title">Outing Duration</div>
+<div class="row">
+<div class="field">
+<label>Date Out</label>
+<input type="date" id="dateOut" required>
+</div>
+<div class="field">
+<label>Date In</label>
+<input type="date" id="dateIn" required>
+</div>
+</div>
+
+<div class="section-title">Guardian Information</div>
+<div class="field">
+<label>Guardian Name</label>
+<input type="text" id="guardian" required>
+</div>
+
+<button type="submit" class="submit-btn">Submit Outing Request</button>
+
+</form>
+</div>
+
+<!-- HISTORY -->
+<div id="history" class="hidden">
+<div class="history-card" id="historyContent">
+<p>No application submitted yet.</p>
+</div>
+</div>
+
+</div>
+
+<script>
+function showTab(tab){
+document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+event.target.classList.add('active');
+document.getElementById('application').classList.add('hidden');
+document.getElementById('history').classList.add('hidden');
+document.getElementById(tab).classList.remove('hidden');
+}
+
+// Others reason
+const outingType=document.getElementById('outingType');
+const others=document.getElementById('othersReason');
+outingType.addEventListener('change',()=>{
+if(outingType.value==='Others'){
+others.style.display='block';
+others.required=true;
+}else{
+others.style.display='none';
+others.required=false;
+others.value='';
+}
+});
+
+// Submit
+document.getElementById('outingForm').addEventListener('submit',function(e){
+e.preventDefault();
+
+const data={
+name:name.value,
+type:outingType.value,
+dateOut:dateOut.value,
+dateIn:dateIn.value,
+status:'Pending'
+};
+
+document.getElementById('historyContent').innerHTML=`
+<p><strong>Name:</strong> ${data.name}</p>
+<p><strong>Type:</strong> ${data.type}</p>
+<p><strong>Date:</strong> ${data.dateOut} → ${data.dateIn}</p>
+<p class="status pending">Status: ${data.status}</p>
+`;
+
+this.reset();
+others.style.display='none';
+
+showTab('history');
+document.querySelectorAll('.tab-btn')[1].classList.add('active');
+document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+});
+</script>
+
+</body>
+</html>
